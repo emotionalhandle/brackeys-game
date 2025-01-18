@@ -13,12 +13,12 @@ public class PlayMovement : MonoBehaviour
 
         if (Input.GetKey("d"))
         {
-            rb.AddForce(sidewaysForce * Time.deltaTime,0,0);
+            rb.AddForce(sidewaysForce * Time.deltaTime,0,0, ForceMode.VelocityChange);
         }
 
         if (Input.GetKey("a"))
         {
-            rb.AddForce(-sidewaysForce * Time.deltaTime,0,0);
+            rb.AddForce(-sidewaysForce * Time.deltaTime,0,0, ForceMode.VelocityChange);
         }
     }
 }
