@@ -4,13 +4,22 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     bool gameOver = false;
+
+    public float restartDelay = 1f;
+    public GameObject completeLevelUI;
+
+    public void CompleteLevel()
+    {
+        completeLevelUI.SetActive(true);
+        Debug.Log("Level complete");
+    }
     public void EndGame()
     {
         if (gameOver == false)
         {
             gameOver = true;
             Debug.Log("GAME OVER");
-            Restart();
+            Invoke("Restart", restartDelay);
         }
     }
 
