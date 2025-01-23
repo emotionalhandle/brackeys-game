@@ -15,7 +15,6 @@ public class PlayMovement : MonoBehaviour
         if (collision.collider.tag == "Ground") 
         {
             isGrounded = true;
-            Debug.Log("Touched ground");
         }
     }
 
@@ -24,7 +23,6 @@ public class PlayMovement : MonoBehaviour
         if (collision.collider.tag == "Ground")
         {
             isGrounded = false;
-            Debug.Log("Exit ground");
         }
     }
 
