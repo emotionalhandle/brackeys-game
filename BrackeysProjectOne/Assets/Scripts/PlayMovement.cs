@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayMovement : MonoBehaviour
 {
-    private bool isGrounded;
+    public bool isGrounded;
     public Rigidbody rb;
 
     public float forwardForce = 2000f;
@@ -24,6 +24,11 @@ public class PlayMovement : MonoBehaviour
         {
             isGrounded = false;
         }
+    }
+
+    public void KnockBack()
+    {
+        rb.AddForce(0,0, -forwardForce * Time.deltaTime, ForceMode.VelocityChange);
     }
 
     void FixedUpdate()

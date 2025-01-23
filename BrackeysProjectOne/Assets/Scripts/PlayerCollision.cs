@@ -8,8 +8,9 @@ public class PlayerCollision : MonoBehaviour
     {
         if (collisionInfo.collider.tag == "Obstacle")
         {
-            movement.enabled = false;
-            FindAnyObjectByType<GameManager>().EndGame();
+            movement.KnockBack();
+            //movement.enabled = false;
+            //FindAnyObjectByType<GameManager>().EndGame();
         }
 
         if (collisionInfo.collider.tag == "DestructibleObstacle")
