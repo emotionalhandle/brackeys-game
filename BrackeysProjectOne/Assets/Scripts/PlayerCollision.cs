@@ -9,7 +9,7 @@ public class PlayerCollision : MonoBehaviour
         if (collisionInfo.collider.tag == "Obstacle")
         {
             movement.enabled = false;
-            FindObjectOfType<GameManager>().EndGame();
+            FindAnyObjectByType<GameManager>().EndGame();
         }
 
         if (collisionInfo.collider.tag == "DestructibleObstacle")
@@ -34,7 +34,7 @@ public class PlayerCollision : MonoBehaviour
             else
             {
                 movement.enabled = false;
-                FindObjectOfType<GameManager>().EndGame();
+                FindAnyObjectByType<GameManager>().EndGame();
             }
         }
 
