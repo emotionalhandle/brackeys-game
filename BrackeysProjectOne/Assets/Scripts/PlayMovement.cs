@@ -49,7 +49,7 @@ public class PlayMovement : MonoBehaviour
 
         if (rb.position.y < -1f)
         {
-            FindObjectOfType<GameManager>().EndGame();
+            FindAnyObjectByType<GameManager>().EndGame();
         }
     }
 }
