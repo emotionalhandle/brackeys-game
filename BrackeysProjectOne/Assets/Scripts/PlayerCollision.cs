@@ -24,6 +24,11 @@ public class PlayerCollision : MonoBehaviour
             }
             if (transform.position.y > maxY)
             {
+                DestructibleObstacle obs = collisionInfo.collider.GetComponent<DestructibleObstacle>();
+                if (obs != null)
+                {
+                    obs.DestroyObstacle();
+                } 
                 Debug.Log("Landed on top");
             }
             else
