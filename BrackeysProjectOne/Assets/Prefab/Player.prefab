@@ -184,4 +184,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movement: {fileID: 506603866945597734}
-  lives: 1
+  lives: 4
+  health: {fileID: 0}
