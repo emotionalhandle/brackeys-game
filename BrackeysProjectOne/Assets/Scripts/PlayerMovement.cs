@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     public bool isGrounded;
     public Rigidbody rb;

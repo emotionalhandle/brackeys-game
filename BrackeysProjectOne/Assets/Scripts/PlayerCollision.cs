@@ -3,12 +3,14 @@ using UnityEngine;
 
 public class PlayerCollision : MonoBehaviour
 {
-    public PlayMovement movement;
+    public PlayerMovement movement;
+    public PlayerHealth health;
     void OnCollisionEnter(Collision collisionInfo)
     {
         if (collisionInfo.collider.tag == "Obstacle")
         {
             movement.KnockBack();
+            health.DamagePlayer();
             //movement.enabled = false;
             //FindAnyObjectByType<GameManager>().EndGame();
         }

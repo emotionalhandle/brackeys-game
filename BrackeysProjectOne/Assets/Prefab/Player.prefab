@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 143245962916445219}
   - component: {fileID: 506603866945597734}
   - component: {fileID: 968390820693482107}
+  - component: {fileID: 2808414364427682862}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -150,9 +151,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 894271d8e55ac6d4a916c9190480d5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isGrounded: 0
   rb: {fileID: 143245962916445219}
   forwardForce: 2000
   sidewaysForce: 50
+  jumpForce: 1000
+  downwardForce: 50
 --- !u!114 &968390820693482107
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,3 +170,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movement: {fileID: 506603866945597734}
+  health: {fileID: 2808414364427682862}
+--- !u!114 &2808414364427682862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8413439771288619081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfa44da227a0c684eb24c44a529ac869, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movement: {fileID: 506603866945597734}
+  lives: 1
