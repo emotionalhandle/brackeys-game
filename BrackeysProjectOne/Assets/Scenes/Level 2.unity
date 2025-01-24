@@ -1637,6 +1637,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 255757113}
   m_SourcePrefab: {fileID: 100100000, guid: 88aed6113548428418d885728199aaec, type: 3}
+--- !u!114 &6293856223982845290 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7071905447668241879, guid: 88aed6113548428418d885728199aaec, type: 3}
+  m_PrefabInstance: {fileID: 6293856223982845289}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7456787269854907300
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1649,6 +1660,10 @@ PrefabInstance:
       propertyPath: jumpForce
       value: 1000
       objectReference: {fileID: 0}
+    - target: {fileID: 2808414364427682862, guid: b41a0996ba104bc4789371701019c20d, type: 3}
+      propertyPath: health
+      value: 
+      objectReference: {fileID: 6293856223982845290}
     - target: {fileID: 8298817306475508213, guid: b41a0996ba104bc4789371701019c20d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
