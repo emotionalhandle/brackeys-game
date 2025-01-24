@@ -1656,12 +1656,8 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 506603866945597734, guid: b41a0996ba104bc4789371701019c20d, type: 3}
-      propertyPath: jumpForce
-      value: 1000
-      objectReference: {fileID: 0}
     - target: {fileID: 2808414364427682862, guid: b41a0996ba104bc4789371701019c20d, type: 3}
-      propertyPath: health
+      propertyPath: healthText
       value: 
       objectReference: {fileID: 6293856223982845290}
     - target: {fileID: 8298817306475508213, guid: b41a0996ba104bc4789371701019c20d, type: 3}

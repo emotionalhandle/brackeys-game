@@ -8,6 +8,11 @@ public class GameManager : MonoBehaviour
     public float restartDelay = 1f;
     public GameObject completeLevelUI;
 
+    void Start()
+    {
+        GameData.ResetHealth();
+    }
+
     public void CompleteLevel()
     {
         completeLevelUI.SetActive(true);
