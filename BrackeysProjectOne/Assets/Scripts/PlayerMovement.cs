@@ -10,11 +10,20 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce = 20f;
     public float downwardForce = 50f;
 
+    private int maxJumps = 2;  // Maximum number of jumps allowed
+    public int remainingJumps;  // Current number of jumps available
+
+    void Start()
+    {
+        remainingJumps = maxJumps;
+    }
+
     void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.tag == "Ground") 
         {
             isGrounded = true;
+            remainingJumps = maxJumps;  // Reset jumps when touching ground
         }
     }
 
@@ -47,9 +56,10 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(-sidewaysForce * Time.deltaTime,0,0, ForceMode.VelocityChange);
         }
 
-        if (Input.GetKey("space") && isGrounded)
+        if (Input.GetKeyDown("space") && remainingJumps > 0)
         {
             rb.AddForce(0, jumpForce * Time.deltaTime, 0, ForceMode.VelocityChange);
+            remainingJumps--;
         }
 
         if (rb.position.y < -1f)
