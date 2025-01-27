@@ -9,11 +9,6 @@ public class GameTimer : MonoBehaviour
     private float currentTime;
     private bool isGameOver = false;
 
-    void Awake()
-    {
-        GameData.RemainingTime = gameDuration;
-    }
-
     void Start()
     {
         // If there's no saved time, start fresh

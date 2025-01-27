@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce = 20f;
     public float downwardForce = 50f;
 
-    private int maxJumps = 2;  // Maximum number of jumps allowed
+    public int maxJumps = 2;  // Maximum number of jumps allowed
     public int remainingJumps;  // Current number of jumps available
 
     [Header("Lane System")]
@@ -22,8 +22,6 @@ public class PlayerMovement : MonoBehaviour
     [Header("Speed System")]
     public float baseForwardSpeed = 2000f;
     public float speedMultiplier = 1f;
-    private float maxSpeedMultiplier = 2f;
-    public float speedIncreaseRate = 0.1f;
 
     void Start()
     {
@@ -81,12 +79,6 @@ public class PlayerMovement : MonoBehaviour
         // Forward movement with increasing speed
         float currentSpeed = forwardForce * speedMultiplier * Time.deltaTime;
         rb.AddForce(0, 0, currentSpeed);
-        
-        // Gradually increase speed
-        if (speedMultiplier < maxSpeedMultiplier)
-        {
-            speedMultiplier += speedIncreaseRate * Time.deltaTime;
-        }
 
         // Smooth lane movement
         float currentX = transform.position.x;

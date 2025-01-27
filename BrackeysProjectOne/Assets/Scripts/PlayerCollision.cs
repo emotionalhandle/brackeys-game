@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using System.Collections;
 
 public class PlayerCollision : MonoBehaviour
 {
@@ -35,11 +36,9 @@ public class PlayerCollision : MonoBehaviour
             Debug.Log(hitDirection);
             if (hitDirection == HitDirection.Top)
             {
-                DestructibleObstacle obs = collisionInfo.collider.GetComponent<DestructibleObstacle>();
-                if (obs != null)
-                {
-                    obs.DestroyObstacle();
-                } 
+                Debug.Log("Should delete");
+                movement.remainingJumps = movement.maxJumps;
+                StartCoroutine(HandleDestruction(collisionInfo.collider.GetComponent<DestructibleObstacle>()));
             }
             else
             {
@@ -49,6 +48,24 @@ public class PlayerCollision : MonoBehaviour
         }
 
         Debug.Log(collisionInfo.collider.name);
+    }
+
+    private IEnumerator HandleDestruction(DestructibleObstacle obs)
+    {
+        Renderer renderer = obs.GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            Color originalColor = renderer.material.color;
+            Color destructionColor = Color.red; // Change to red or any color you prefer
+            renderer.material.color = destructionColor;
+        }
+        // Wait for a short duration before destroying the obstacle
+        yield return new WaitForSeconds(0.5f); // Adjust the delay as needed
+
+        if (obs != null)
+        {
+            obs.DestroyObstacle();
+        }
     }
 
     private HitDirection DetermineHitDirection(Collision collisionInfo)
