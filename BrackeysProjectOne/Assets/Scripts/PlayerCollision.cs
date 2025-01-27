@@ -37,7 +37,7 @@ public class PlayerCollision : MonoBehaviour
             else
             {
                 movement.enabled = false;
-                FindAnyObjectByType<GameManager>().EndGame();
+                FindAnyObjectByType<GameManager>().RestartLevel();
             }
         }
 

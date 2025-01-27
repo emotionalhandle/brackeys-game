@@ -5,6 +5,7 @@ public class GameTimer : MonoBehaviour
 {
     public TextMeshProUGUI timerText;
     public float gameDuration = 300f; // 5 minutes in seconds
+    public GameObject levelFailedUI;  // Reference to the level failed panel
     private float currentTime;
     private bool isGameOver = false;
 
@@ -33,11 +34,17 @@ public class GameTimer : MonoBehaviour
             {
                 currentTime = 0;
                 isGameOver = true;
-                FindAnyObjectByType<GameManager>().EndGame();
+                TimeUp();
             }
 
             DisplayTime();
         }
+    }
+
+    void TimeUp()
+    {
+        FindAnyObjectByType<GameManager>().TimeUp();
+        Debug.Log("Time's up!");
     }
 
     void DisplayTime()

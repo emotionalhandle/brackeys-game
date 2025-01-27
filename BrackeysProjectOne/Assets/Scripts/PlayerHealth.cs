@@ -21,7 +21,7 @@ public class PlayerHealth : MonoBehaviour
         if (health == 0)
         {
             movement.enabled = false;
-            FindAnyObjectByType<GameManager>().EndGame();
+            FindAnyObjectByType<GameManager>().RestartLevel();
         }
     }
 }
