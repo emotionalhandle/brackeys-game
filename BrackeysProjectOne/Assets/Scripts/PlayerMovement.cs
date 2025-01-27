@@ -13,9 +13,22 @@ public class PlayerMovement : MonoBehaviour
     private int maxJumps = 2;  // Maximum number of jumps allowed
     public int remainingJumps;  // Current number of jumps available
 
+    [Header("Lane System")]
+    public float laneDistance = 12f;  // Increased from 4f to 12f for wider lanes
+    public float laneSwitchSpeed = 10f;  // How fast to switch lanes
+    public int currentLane = 2;  // Start in middle lane (0-4 for 5 lanes)
+    private float targetX;  // Target X position for lane
+    
+    [Header("Speed System")]
+    public float baseForwardSpeed = 2000f;
+    public float speedMultiplier = 1f;
+    private float maxSpeedMultiplier = 2f;
+    public float speedIncreaseRate = 0.1f;
+
     void Start()
     {
         remainingJumps = maxJumps;
+        targetX = transform.position.x;
     }
 
     void OnCollisionEnter(Collision collision)
@@ -42,19 +55,39 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.AddForce(0,0,forwardForce * Time.deltaTime);
-        rb.AddForce(0, -downwardForce * rb.mass, 0); // Add additional downward force to simulate increased gravity
-    
-
-        if (Input.GetKey("d"))
+        // Forward movement with increasing speed
+        float currentSpeed = forwardForce * speedMultiplier * Time.deltaTime;
+        rb.AddForce(0, 0, currentSpeed);
+        
+        // Gradually increase speed
+        if (speedMultiplier < maxSpeedMultiplier)
         {
-            rb.AddForce(sidewaysForce * Time.deltaTime,0,0, ForceMode.VelocityChange);
+            speedMultiplier += speedIncreaseRate * Time.deltaTime;
         }
 
-        if (Input.GetKey("a"))
+        // Lane switching with A/D keys
+        if (Input.GetKeyDown("d") && currentLane < 4)
         {
-            rb.AddForce(-sidewaysForce * Time.deltaTime,0,0, ForceMode.VelocityChange);
+            currentLane++;
+            targetX = currentLane * laneDistance - (2 * laneDistance); // Center middle lane at x=0
         }
+
+        if (Input.GetKeyDown("a") && currentLane > 0)
+        {
+            currentLane--;
+            targetX = currentLane * laneDistance - (2 * laneDistance);
+        }
+
+        // Smooth lane movement
+        float currentX = transform.position.x;
+        if (Mathf.Abs(currentX - targetX) > 0.1f)
+        {
+            float newX = Mathf.Lerp(currentX, targetX, laneSwitchSpeed * Time.deltaTime);
+            rb.MovePosition(new Vector3(newX, rb.position.y, rb.position.z));
+        }
+
+        // Keep existing jump and gravity mechanics
+        rb.AddForce(0, -downwardForce * rb.mass, 0);
 
         if (Input.GetKeyDown("space") && remainingJumps > 0)
         {
