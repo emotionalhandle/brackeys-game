@@ -25,9 +25,6 @@ public class PlayerMovement : MonoBehaviour
     private float maxSpeedMultiplier = 2f;
     public float speedIncreaseRate = 0.1f;
 
-    private bool switchingLeft = false;
-    private bool switchingRight = false;
-
     void Start()
     {
         remainingJumps = maxJumps;
@@ -74,7 +71,7 @@ public class PlayerMovement : MonoBehaviour
         // Jump input detection
         if (Input.GetKeyDown(KeyCode.Space) && remainingJumps > 0)
         {
-            rb.AddForce(0, jumpForce * Time.deltaTime, 0, ForceMode.VelocityChange);
+            rb.AddForce(0, jumpForce, 0, ForceMode.Impulse);
             remainingJumps--;
         }
     }
