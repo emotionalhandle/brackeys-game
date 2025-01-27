@@ -3,11 +3,9 @@ using TMPro;
 
 public class Score : MonoBehaviour
 {
-    public Transform player; 
-    public TextMeshProUGUI scoreText;
-    // Update is called once per frame
-    void Update()
+    void Start()
     {
-        scoreText.text = player.position.z.ToString("0");
+        // This script can be removed or left empty
+        // The GameTimer script handles the display now
     }
 }
