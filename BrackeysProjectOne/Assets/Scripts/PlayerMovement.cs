@@ -24,10 +24,27 @@ public class PlayerMovement : MonoBehaviour
     public float baseForwardSpeed = 2000f;
     public float speedMultiplier = 1f;
 
+    private float resetDuration = 0.5f; // Duration for the reset effect
+    private float resetTimer = 0f; // Timer for the reset effect
+    private Quaternion initialRotation; // Store the initial rotation
+
+    public float baseSpinForce = 1f; // Base amount of force to apply for spinning
+    public float maxSpinForce = 50f; // Maximum spin force
+    public float chargeRate = 5f; // Rate at which spin force is charged
+
+    private float currentSpinForce = 0f; // Current spin force being applied
+
     void Start()
     {
         remainingJumps = maxJumps;
         targetX = transform.position.x;
+        initialRotation = transform.rotation; // Store the initial rotation
+    }
+
+    public void ResetOrientation()
+    {
+        resetTimer = 0f; // Reset the timer
+        initialRotation = transform.rotation; // Store the current rotation as the initial rotation
     }
 
     void OnCollisionEnter(Collision collision)
@@ -36,6 +53,11 @@ public class PlayerMovement : MonoBehaviour
         {
             isGrounded = true;
             remainingJumps = maxJumps;  // Reset jumps when touching ground
+        }
+        else if (collision.collider.tag == "Obstacle")
+        {
+            // Call the reset orientation method after hitting an obstacle
+            ResetOrientation();
         }
     }
 
@@ -54,6 +76,17 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        // Gradually reset orientation if the timer is active
+        if (resetTimer < resetDuration)
+        {
+            resetTimer += Time.deltaTime;
+            float t = resetTimer / resetDuration; // Calculate the interpolation factor
+            transform.rotation = Quaternion.Lerp(initialRotation, Quaternion.identity, t); // Lerp to the target rotation
+
+            // Gradually reduce angular velocity
+            rb.angularVelocity = Vector3.Lerp(rb.angularVelocity, Vector3.zero, t);
+        }
+
         // Lane switching with A/D keys - detect input in Update for responsiveness
         if (Input.GetKeyDown(KeyCode.D) && currentLane < numberOfLanes - 1)
         {
@@ -72,6 +105,22 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.AddForce(0, jumpForce, 0, ForceMode.Impulse);
             remainingJumps--;
+        }
+
+        // Charge spin while holding down the S key
+        if (Input.GetKey(KeyCode.S))
+        {
+            // Increase the current spin force based on the charge rate
+            currentSpinForce += chargeRate * Time.deltaTime; // Accumulate spin force
+            currentSpinForce = Mathf.Clamp(currentSpinForce, 0, maxSpinForce); // Clamp to max spin force
+
+            // Apply the current spin force as torque
+            rb.AddTorque(Vector3.up * currentSpinForce * Time.deltaTime, ForceMode.VelocityChange); // Apply torque for spinning
+        }
+        else
+        {
+            // Reset the spin force when the key is released
+            currentSpinForce = 0f; // Reset the spin force when the key is not held
         }
     }
 
