@@ -31,14 +31,31 @@ public class PlayerMovement : MonoBehaviour
     public float baseSpinForce = 1f; // Base amount of force to apply for spinning
     public float maxSpinForce = 50f; // Maximum spin force
     public float chargeRate = 5f; // Rate at which spin force is charged
+    public float decelerationRate = 10f; // Rate at which spin force decreases
+    public float angularDrag = 5f; // Drag applied to slow down angular velocity
+    public float rotationSpeed = 2f; // Speed of rotation back to identity
+    public float correctiveTorqueStrength = 10f; // Strength of corrective torque to return to identity
 
-    private float currentSpinForce = 0f; // Current spin force being applied
+    public float particleReleaseModifier = 10f; // How much to multiply emission rate by after letting go of S key
+
+    public float currentSpinForce = 0f; // Current spin force being applied
+    public ParticleSystem pookieParticleSystem; // Public reference to the particle system
 
     void Start()
     {
         remainingJumps = maxJumps;
         targetX = transform.position.x;
         initialRotation = transform.rotation; // Store the initial rotation
+
+        // Check if the particle system is assigned
+        if (pookieParticleSystem == null)
+        {
+            Debug.LogError("No ParticleSystem assigned to Pookie!");
+        }
+        else
+        {
+            Debug.Log("ParticleSystem found successfully");
+        }
     }
 
     public void ResetOrientation()
@@ -116,11 +133,63 @@ public class PlayerMovement : MonoBehaviour
 
             // Apply the current spin force as torque
             rb.AddTorque(Vector3.up * currentSpinForce * Time.deltaTime, ForceMode.VelocityChange); // Apply torque for spinning
+
+            // Adjust the particle system emission rate based on the current spin force
+            if (pookieParticleSystem != null)
+            {
+                var emission = pookieParticleSystem.emission;
+                emission.rateOverTime = currentSpinForce; // Set the emission rate to match the spin force
+                Debug.Log($"Setting emission rate to: {currentSpinForce}");
+            }
         }
         else
         {
-            // Reset the spin force when the key is released
-            currentSpinForce = 0f; // Reset the spin force when the key is not held
+            // Gradually decrease the spin force when the key is not held
+            currentSpinForce -= decelerationRate * Time.deltaTime; // Decrease spin force
+            currentSpinForce = Mathf.Max(currentSpinForce, 0); // Ensure it doesn't go below zero
+
+            // Apply the current spin force as torque
+            rb.AddTorque(Vector3.up * currentSpinForce * Time.deltaTime, ForceMode.VelocityChange); // Apply torque for spinning
+
+            // Gradually reduce angular velocity to create a smooth slowdown effect
+            rb.angularVelocity = Vector3.Lerp(rb.angularVelocity, Vector3.zero, angularDrag * Time.deltaTime);
+
+            // Smoothly rotate to the identity quaternion if angular velocity is low
+            if (rb.angularVelocity.magnitude < 0.1f) // Threshold to determine if it's "stopped"
+            {
+                // Use Slerp to smoothly transition to the identity quaternion
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.identity, rotationSpeed * Time.deltaTime);
+                
+                // Apply corrective torque to help return to identity if not close enough
+                if (Quaternion.Angle(transform.rotation, Quaternion.identity) > 1f) // Threshold to determine if it's "off-axis"
+                {
+                    Vector3 correctiveTorque = Vector3.Cross(transform.up, Vector3.up) * correctiveTorqueStrength;
+                    rb.AddTorque(correctiveTorque, ForceMode.VelocityChange);
+                }
+
+                // Stop any angular movement if close to identity
+                if (Quaternion.Angle(transform.rotation, Quaternion.identity) < 1f) // Threshold to determine if it's "stopped"
+                {
+                    rb.angularVelocity = Vector3.zero; // Stop any angular movement
+                    transform.rotation = Quaternion.identity; // Reset to identity quaternion
+                    if (pookieParticleSystem != null)
+                    {
+                        var emission = pookieParticleSystem.emission;
+                        emission.rateOverTime = 0; // Stop emitting particles when not spinning
+                        Debug.Log("Setting emission rate to 0");
+                    }
+                }
+            }
+            else
+            {
+                // Adjust the particle system emission rate based on the current angular velocity
+                if (pookieParticleSystem != null)
+                {
+                    var emission = pookieParticleSystem.emission;
+                    emission.rateOverTime = currentSpinForce*particleReleaseModifier; // Set the emission rate to match the spin force
+                    Debug.Log($"Setting emission rate to: {currentSpinForce}");
+                }
+            }
         }
     }
 
