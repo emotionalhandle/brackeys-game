@@ -88,6 +88,12 @@ public class PlayerMovement : MonoBehaviour
             float newX = Mathf.Lerp(currentX, targetX, laneSwitchSpeed * Time.deltaTime);
             rb.MovePosition(new Vector3(newX, rb.position.y, rb.position.z));
         }
+        
+        // Snap to the target lane position if close enough
+        if (Mathf.Abs(currentX - targetX) <= 0.1f)
+        {
+            rb.MovePosition(new Vector3(targetX, rb.position.y, rb.position.z));  // Snap to targetX
+        }
 
         // Keep existing gravity mechanics
         rb.AddForce(0, -downwardForce * rb.mass, 0);

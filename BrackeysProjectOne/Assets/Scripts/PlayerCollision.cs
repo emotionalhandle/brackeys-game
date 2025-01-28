@@ -24,10 +24,19 @@ public class PlayerCollision : MonoBehaviour
         {
             HitDirection hitDirection = DetermineHitDirection(collisionInfo);
             Debug.Log(hitDirection);
-            movement.KnockBack();
             health.DamagePlayer();
-            //movement.enabled = false;
-            //FindAnyObjectByType<GameManager>().EndGame();
+
+            // Check if the player is moving towards the obstacle
+            Vector3 hitNormal = collisionInfo.contacts[0].normal;
+            if (hitDirection == HitDirection.Front && Vector3.Dot(hitNormal, -transform.forward) > 0.5f)
+            {
+                movement.KnockBack();
+            }
+            else
+            {
+                // Handle other collision responses (e.g., side or back hits)
+                Debug.Log("Hit from the side or back, no knockback applied.");
+            }
         }
 
         if (collisionInfo.collider.tag == "DestructibleObstacle")
