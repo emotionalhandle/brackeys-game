@@ -14,9 +14,10 @@ public class PlayerMovement : MonoBehaviour
     public int remainingJumps;  // Current number of jumps available
 
     [Header("Lane System")]
+    public int numberOfLanes = 5;  // Adjustable number of lanes in the editor
     public float laneDistance = 8f;  // Increased from 4f to 8f for wider lanes
     public float laneSwitchSpeed = 10f;  // How fast to switch lanes
-    public int currentLane = 2;  // Start in middle lane (0-4 for 5 lanes)
+    public int currentLane = 2;  // Start in middle lane (0 to numberOfLanes-1)
     private float targetX;  // Target X position for lane
     
     [Header("Speed System")]
@@ -54,16 +55,16 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         // Lane switching with A/D keys - detect input in Update for responsiveness
-        if (Input.GetKeyDown(KeyCode.D) && currentLane < 4)
+        if (Input.GetKeyDown(KeyCode.D) && currentLane < numberOfLanes - 1)
         {
             currentLane++;
-            targetX = currentLane * laneDistance - (2 * laneDistance);
+            targetX = (currentLane - (numberOfLanes / 2)) * laneDistance;  // Adjusted formula
         }
 
         if (Input.GetKeyDown(KeyCode.A) && currentLane > 0)
         {
             currentLane--;
-            targetX = currentLane * laneDistance - (2 * laneDistance);
+            targetX = (currentLane - (numberOfLanes / 2)) * laneDistance;  // Adjusted formula
         }
 
         // Jump input detection
